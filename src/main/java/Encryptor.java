@@ -1,6 +1,7 @@
 package main.java;
 
 import java.io.*;
+import java.math.BigInteger;
 
 public class Encryptor {
 
@@ -14,11 +15,12 @@ public class Encryptor {
     public int encrypt(InputStream in, OutputStream out) throws IOException {
         try (InputStreamReader reader = new InputStreamReader(in)) {
             try (OutputStreamWriter writer = new OutputStreamWriter(out)) {
-                int keyToInt = Integer.decode(key);
+                BigInteger keyToInt = BigInteger.valueOf(Integer.decode(key));
+                byte[] keyToBytes = keyToInt.toByteArray();
                 int sym = reader.read();
                 int count = 0;
                 while (sym != -1) {
-                    writer.write(sym ^ keyToInt);
+                    writer.write(sym ^ keyToBytes[count % keyToBytes.length]);
                     count++;
                     sym = reader.read();
                 }

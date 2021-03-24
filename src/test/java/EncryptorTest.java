@@ -11,7 +11,7 @@ import java.nio.file.Path;
 
 class EncryptorTest {
     private void assertFileContent(String name, String expectedContent) throws IOException {
-        String content = Files.lines(Path.of(name)).reduce("",String::concat);
+        String content = String.valueOf(Files.readAllLines(Path.of(name)));
         assertEquals(expectedContent, content);
     }
 
