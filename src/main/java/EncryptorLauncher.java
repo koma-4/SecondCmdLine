@@ -18,18 +18,19 @@ public class EncryptorLauncher {
 
 
     public static void main(String[] args) {
+        if (args == null) throw new IllegalArgumentException("Illegal arguments");
         new EncryptorLauncher().launch(args);
     }
 
     private void launch(String[] args) {
         CmdLineParser parser = new CmdLineParser(this);
-        String key = "";
+        String key;
         try {
             parser.parseArgument(args);
-            if ((keyToEncrypt.isEmpty() && keyToDecrypt.isEmpty())
-                    || (!keyToEncrypt.isEmpty() && !keyToDecrypt.isEmpty()) ||
-                    (!keyToDecrypt.isEmpty() && !keyToDecrypt.matches("^0[xX][0-9a-fA-F]+")) ||
-                    (!keyToEncrypt.isEmpty() && !keyToEncrypt.matches("^0[xX][0-9a-fA-F]+"))) {
+            if ((keyToEncrypt == null && keyToDecrypt == null)
+                    || (keyToEncrypt != null && keyToDecrypt != null) ||
+                    (keyToDecrypt != null && !keyToDecrypt.matches("^0[xX][0-9a-fA-F]+")) ||
+                    (keyToEncrypt != null && !keyToEncrypt.matches("^0[xX][0-9a-fA-F]+"))) {
                 System.err.println("Error entering arguments");
                 throw new IllegalArgumentException("Illegal arguments");
             }
@@ -40,7 +41,7 @@ public class EncryptorLauncher {
             parser.printUsage(System.err);
             return;
         }
-        if (keyToDecrypt.isEmpty()) key = keyToEncrypt;
+        if (keyToDecrypt == null) key = keyToEncrypt;
         else key = keyToDecrypt;
         Encryptor encryptor = new Encryptor(key);
         try {

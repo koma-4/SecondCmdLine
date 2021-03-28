@@ -20,12 +20,14 @@ class EncryptorTest {
         Encryptor encryptor = new Encryptor("0x1F");
         encryptor.encrypt("src/files/text1.txt", "src/files/text1.enc.txt");
         assertFileContent("src/files/text1.enc.txt","^]\\~}|-,");
+        encryptor.encrypt("src/files/text2.txt", "src/files/text2.enc.txt");
+        assertFileContent("src/files/text2.enc.txt", "om^OM~-,");
     }
 
     @Test
     void testDecrypt() throws IOException {
         Encryptor encryptor = new Encryptor("0x1F");
-        encryptor.encrypt("src/files/text1.enc.txt", "src/files/text1.txt");
+        encryptor.decrypt("src/files/text1.enc.txt", "src/files/text1.txt");
         assertFileContent("src/files/text1.txt","ABCabc23");
     }
 }
