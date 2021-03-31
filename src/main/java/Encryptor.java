@@ -25,11 +25,8 @@ public class Encryptor {
                 while (sym != -1) {
                     output.writeByte(sym ^ keyToBytes[count % keyToBytes.length]);
                     count++;
-                    try {
-                        sym = input.readByte();
-                    } catch (IOException e) {
-                        break;
-                    }
+                    if (input.available() > 0) sym = input.readByte();
+                    else break;
                 }
             }
         }
