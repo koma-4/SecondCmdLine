@@ -12,21 +12,21 @@ import java.nio.file.Path;
 class EncryptorTest {
     private void assertFileContent(String name, String expectedContent) throws IOException {
         String content = String.valueOf(Files.readAllLines(Path.of(name)));
-        assertEquals(expectedContent, content);
+        assertEquals("[" + expectedContent+ "]",  content);
     }
 
     @Test
     void testEncrypt() throws IOException {
-        Encryptor encryptor = new Encryptor("0x1F");
-        encryptor.encrypt("src/files/text1.txt", "src/files/text1.enc.txt");
-        assertFileContent("src/files/text1.enc.txt","^]\\~}|-,");
+        Encryptor encryptor = new Encryptor("1F");
+        encryptor.decrypt("src/files/text1.enc.txt", "src/files/text1.txt");
+        assertFileContent("src/files/text1.txt","ABCabc23");
         encryptor.encrypt("src/files/text2.txt", "src/files/text2.enc.txt");
-        assertFileContent("src/files/text2.enc.txt", "om^OM~-,");
+        assertFileContent("src/files/text2.enc.txt", "ϏύϾϯϭΞ-,");
     }
 
     @Test
     void testDecrypt() throws IOException {
-        Encryptor encryptor = new Encryptor("0x1F");
+        Encryptor encryptor = new Encryptor("1F");
         encryptor.decrypt("src/files/text1.enc.txt", "src/files/text1.txt");
         assertFileContent("src/files/text1.txt","ABCabc23");
     }

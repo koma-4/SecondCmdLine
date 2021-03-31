@@ -25,12 +25,22 @@ public class EncryptorLauncher {
     private void launch(String[] args) {
         CmdLineParser parser = new CmdLineParser(this);
         String key;
+        boolean flag;
+        if (keyToDecrypt == null && keyToEncrypt != null) {
+            key = keyToEncrypt;
+            flag = true;
+        }
+        else if (keyToEncrypt == null && keyToDecrypt != null) {
+            key = keyToDecrypt;
+            flag = false;
+        }
+        else  {
+            System.err.println("Error entering arguments");
+            throw new IllegalArgumentException("Illegal arguments");
+        }
         try {
             parser.parseArgument(args);
-            if ((keyToEncrypt == null && keyToDecrypt == null)
-                    || (keyToEncrypt != null && keyToDecrypt != null) ||
-                    (keyToDecrypt != null && !keyToDecrypt.matches("^0[xX][0-9a-fA-F]+")) ||
-                    (keyToEncrypt != null && !keyToEncrypt.matches("^0[xX][0-9a-fA-F]+"))) {
+            if (!key.matches("[0-9a-fA-F]+")) {
                 System.err.println("Error entering arguments");
                 throw new IllegalArgumentException("Illegal arguments");
             }
@@ -41,11 +51,10 @@ public class EncryptorLauncher {
             parser.printUsage(System.err);
             return;
         }
-        if (keyToDecrypt == null) key = keyToEncrypt;
-        else key = keyToDecrypt;
         Encryptor encryptor = new Encryptor(key);
         try {
-            encryptor.encrypt(inputFileName, outputFileName);
+            if (flag) encryptor.encrypt(inputFileName, outputFileName);
+            else encryptor.decrypt(inputFileName, outputFileName);
         } catch (IOException e) {
             System.err.println(e.getMessage());
         }
