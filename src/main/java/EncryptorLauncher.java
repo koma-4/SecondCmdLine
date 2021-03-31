@@ -25,25 +25,17 @@ public class EncryptorLauncher {
     private void launch(String[] args) {
         CmdLineParser parser = new CmdLineParser(this);
         String key;
-        enum Check {encrypt(true), decrypt(false);
-            private final boolean value;
-            Check (boolean value) {
-                this.value = value;
-            }
-            boolean getValue() {
-                return this.value;
-            }
-        }
+        enum Check {ENCRYPT, DECRYPT}
         Check toDo;
         try {
             parser.parseArgument(args);
             if (keyToDecrypt == null && keyToEncrypt != null) {
                 key = keyToEncrypt;
-                toDo = Check.encrypt;
+                toDo = Check.ENCRYPT;
             }
             else if (keyToEncrypt == null && keyToDecrypt != null) {
                 key = keyToDecrypt;
-                toDo = Check.decrypt;
+                toDo = Check.DECRYPT;
             }
             else  {
                 System.err.println("Error entering arguments");
@@ -62,7 +54,7 @@ public class EncryptorLauncher {
         }
         Encryptor encryptor = new Encryptor(key);
         try {
-            if (toDo.getValue()) encryptor.encrypt(inputFileName, outputFileName);
+            if (toDo == Check.ENCRYPT) encryptor.encrypt(inputFileName, outputFileName);
             else encryptor.decrypt(inputFileName, outputFileName);
         } catch (IOException e) {
             System.err.println(e.getMessage());
