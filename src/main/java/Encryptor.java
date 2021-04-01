@@ -20,13 +20,12 @@ public class Encryptor {
             try (DataOutputStream output = new DataOutputStream(out)) {
                 BigInteger keyToInt = new BigInteger(key, 16);
                 byte[] keyToBytes = keyToInt.toByteArray();
-                int sym = input.readByte();
+                int sym;
                 int count = 0;
-                while (sym != -1) {
+                while (input.available() > 0) {
+                    sym = input.readByte();
                     output.writeByte(sym ^ keyToBytes[count % keyToBytes.length]);
                     count++;
-                    if (input.available() > 0) sym = input.readByte();
-                    else break;
                 }
             }
         }
